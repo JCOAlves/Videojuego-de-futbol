@@ -1,0 +1,24 @@
+{
+  "name": "videojuego-de-futbol",
+  "version": "1.0.0",
+  "description": "Vídeogame sobre Futebol para ser demonstrado na Mostra de Cultura Espanica no IFRN campus Parnamirim. / Videojuego de fútbol que se presentará en la Muestra de Cultura Española en el campus de Parnamirim del IFRN.",
+  "main": "App.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "venv": ".venv\\Scripts\\pip install -r requirements.txt || .venv/bin/pip install -r requirements.txt || (python -m venv .venv && .venv\\Scripts\\python -m pip install --upgrade pip && .venv\\Scripts\\pip install -r requirements.txt) || (python -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/pip install -r requirements.txt)",
+    "start": ".venv\\Scripts\\python App.py || .venv/bin/python App.py"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JCOAlves/Videojuego-de-futbol.git"
+  },
+  "keywords": [],
+  "author": "Júlio César",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JCOAlves/Videojuego-de-futbol/issues"
+  },
+  "homepage": "https://github.com/JCOAlves/Videojuego-de-futbol#readme"
+}
