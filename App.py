@@ -4,6 +4,10 @@ from sys import exit
 
 from Objects.Balon import Balon
 from Objects.Arquero import Arquero
+from Objects.Porteria import Porteria
+
+from Services.EscenarioJuego import EscenarioJuego
+from Services.InterfazJuego import InterfazJuego
 
 pygame.init()
 
@@ -12,12 +16,21 @@ dimensionesVentana = { "anchura": 950, "altura": 650 }
 Ventana = pygame.display.set_mode((dimensionesVentana["anchura"], dimensionesVentana["altura"]))
 tituloVentana = pygame.display.set_caption("Videojuego de Fútbol")
 
-posionesObjetos = { "Arquero": [200,200], "Balon": [100,100] }
-arquero = Arquero(posionesObjetos["Arquero"][0], posionesObjetos["Arquero"][1], 30, 60)
-balonFutbol = Balon(posionesObjetos["Balon"][0], posionesObjetos["Balon"][1], 30)
+# Dados dos objetos do jogo
+datosArqueiro = { "pontoX": 200, "pontoY": (dimensionesVentana["altura"]-180)-130, "anchura": 100, "altura": 180 }
+datosBalon = { "pontoX": dimensionesVentana["anchura"]/2, "pontoY": 590, "radioCirculo": 30 }
+datosPorteria = { "pontoX": (dimensionesVentana["anchura"]-800)/2, "pontoY": 140, "anchura": 800, "altura": dimensionesVentana["altura"]-270}
+
+# Objetos do jogo
+arquero = Arquero(datosPorteria["pontoX"], datosArqueiro["pontoY"], datosArqueiro["anchura"], datosArqueiro["altura"])
+balonFutbol = Balon(datosBalon["pontoX"], datosBalon["pontoY"], datosBalon["radioCirculo"])
+porteriaArquero = Porteria(datosPorteria["pontoX"], datosPorteria["pontoY"], datosPorteria["anchura"], datosPorteria["altura"])
 
 relogio = pygame.time.Clock()
-velocidadFotogramas = 20
+velocidadFotogramas = 150
+
+tipoInterfaz = "juego"
+reiniciaJuego = False
 
 #Loop infinito principal para atualização do jogo
 print("Videojuego de Fútbol iniciado")
@@ -30,14 +43,22 @@ while True:
             pygame.quit()
             exit()
 
-    
-    balonFutbol.iniciarBalon(pygame, Ventana)
-    arquero.iniciarArquero(pygame, Ventana)
-
-    balonFutbol.pontoX += 1
-    if balonFutbol.pontoX > 800:
-        balonFutbol.pontoX = 0
+        if event.type == MOUSEBUTTONDOWN: # Verifica o evento de click do mouse
+            posi = event.pos # Retorna a possição do Mouse
+            balonFutbol.pontoX = posi[0]
+            balonFutbol.pontoY = posi[1]
 
 
+    # Paginação de jogo
+    if tipoInterfaz != "juego":
+        EscenarioJuego(Ventana, dimensionesVentana["anchura"], dimensionesVentana["altura"])
+            
+        porteriaArquero.iniciarPorteria(Ventana)
+        balonFutbol.iniciarBalon(Ventana)
+        arquero.iniciarArquero(Ventana)
 
-    pygame.display.update()
+        arquero.defensaPorteria(1, datosPorteria["pontoX"], datosPorteria["pontoX"]+datosPorteria["anchura"])
+    else:
+        InterfazJuego(tipoInterfaz)
+
+    pygame.display.flip()
