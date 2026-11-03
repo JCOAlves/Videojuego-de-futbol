@@ -37,6 +37,7 @@ print("Videojuego de Fútbol iniciado")
 while True:
     relogio.tick(velocidadFotogramas) #Função para controlar o número de frames por segundo 
     Ventana.fill((255,255,255)) 
+    
     for event in pygame.event.get():
         if event.type == QUIT:
             print("Videojuego finalizado.\n")
@@ -50,7 +51,7 @@ while True:
 
 
     # Paginação de jogo
-    if tipoInterfaz != "juego":
+    if tipoInterfaz == "juego":
         EscenarioJuego(Ventana, dimensionesVentana["anchura"], dimensionesVentana["altura"])
             
         porteriaArquero.iniciarPorteria(Ventana)
