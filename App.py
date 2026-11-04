@@ -17,20 +17,23 @@ Ventana = pygame.display.set_mode((dimensionesVentana["anchura"], dimensionesVen
 tituloVentana = pygame.display.set_caption("Videojuego de Fútbol")
 
 # Dados dos objetos do jogo
-datosArqueiro = { "pontoX": 200, "pontoY": (dimensionesVentana["altura"]-180)-130, "anchura": 100, "altura": 180 }
-datosBalon = { "pontoX": dimensionesVentana["anchura"]/2, "pontoY": 590, "radioCirculo": 30 }
-datosPorteria = { "pontoX": (dimensionesVentana["anchura"]-800)/2, "pontoY": 140, "anchura": 800, "altura": dimensionesVentana["altura"]-270}
+datosArqueiro = { "pontoX": 200, "pontoY": (dimensionesVentana["altura"]-260)-130, "anchura": 160, "altura": 260 }
+datosBalon = { "pontoX": int(dimensionesVentana["anchura"]/2)-35, "pontoY": 590-35, "radioCirculo": 35 }
+datosPorteria = { "pontoX": int((dimensionesVentana["anchura"]-800)/2), "pontoY": 140, "anchura": 800, "altura": dimensionesVentana["altura"]-270}
 
 # Objetos do jogo
 arquero = Arquero(datosPorteria["pontoX"], datosArqueiro["pontoY"], datosArqueiro["anchura"], datosArqueiro["altura"])
 balonFutbol = Balon(datosBalon["pontoX"], datosBalon["pontoY"], datosBalon["radioCirculo"])
 porteriaArquero = Porteria(datosPorteria["pontoX"], datosPorteria["pontoY"], datosPorteria["anchura"], datosPorteria["altura"])
 
+# Velocidade de atualização de frames do jogo
 relogio = pygame.time.Clock()
 velocidadFotogramas = 150
 
 tipoInterfaz = "juego"
+balonMoviento = False
 reiniciaJuego = False
+posiGol = ()
 
 #Loop infinito principal para atualização do jogo
 print("Videojuego de Fútbol iniciado")
@@ -45,9 +48,8 @@ while True:
             exit()
 
         if event.type == MOUSEBUTTONDOWN: # Verifica o evento de click do mouse
-            posi = event.pos # Retorna a possição do Mouse
-            balonFutbol.pontoX = posi[0]
-            balonFutbol.pontoY = posi[1]
+            posiGol = event.pos # Retorna a possição do Mouse
+            balonMoviento = True
 
 
     # Paginação de jogo
@@ -55,10 +57,21 @@ while True:
         EscenarioJuego(Ventana, dimensionesVentana["anchura"], dimensionesVentana["altura"])
             
         porteriaArquero.iniciarPorteria(Ventana)
+        porteriaArquero.colisionPorteria(porteriaArquero, balonFutbol) # ERRO
+        
         balonFutbol.iniciarBalon(Ventana)
+        if balonMoviento and posiGol:
+            balonFutbol.disparo(posiGol, balonMoviento)
+            if balonFutbol.pontoX == posiGol[0] and balonFutbol.pontoY == posiGol[1]:
+                balonMoviento = False
+                balonFutbol.pontoX = datosBalon["pontoX"]
+                balonFutbol.rect.x = datosBalon["pontoX"]
+                balonFutbol.pontoY = datosBalon["pontoY"]
+                balonFutbol.rect.y = datosBalon["pontoY"]
+        
         arquero.iniciarArquero(Ventana)
-
         arquero.defensaPorteria(1, datosPorteria["pontoX"], datosPorteria["pontoX"]+datosPorteria["anchura"])
+    
     else:
         InterfazJuego(tipoInterfaz)
 
