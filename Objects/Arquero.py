@@ -38,6 +38,8 @@ class Arquero(pygame.sprite.Sprite):
             self.direccionMovimento = "derecha"
 
     def colisionArquero(self, bolan):
-        if self.rect.collidedict(bolan.rect): # ERRO
-            print("Goleiro pegou a bola!")
+        if self.rect.colliderect(bolan.rect): 
+            return True
+        else:
+            return False
         

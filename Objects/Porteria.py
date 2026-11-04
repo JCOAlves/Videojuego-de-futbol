@@ -24,6 +24,9 @@ class Porteria(pygame.sprite.Sprite):
     def iniciarPorteria(self, ventana):
         ventana.blit(self.imagem, self.rect)
 
-    def colisionPorteria(self, porteria, bolan):
-        if porteria.rect.collidedict(bolan.rect): # ERRO
-            print("Bola no gol!")
+    def colisionPorteria(self, bolan, pontuacao):
+        if self.rect.colliderect(bolan.rect): 
+            pontuacao += 1
+            
+        return pontuacao
+        

@@ -28,15 +28,18 @@ porteriaArquero = Porteria(datosPorteria["pontoX"], datosPorteria["pontoY"], dat
 
 # Velocidade de atualização de frames do jogo
 relogio = pygame.time.Clock()
-velocidadFotogramas = 150
+velocidadFotogramas = 360
+velocidadeArquero = 1
 
 tipoInterfaz = "juego"
 balonMoviento = False
+pontuacao = 0
 reiniciaJuego = False
 posiGol = ()
 
 #Loop infinito principal para atualização do jogo
 print("Videojuego de Fútbol iniciado")
+print(f"Pontuação: {pontuacao}")
 while True:
     relogio.tick(velocidadFotogramas) #Função para controlar o número de frames por segundo 
     Ventana.fill((255,255,255)) 
@@ -50,6 +53,7 @@ while True:
         if event.type == MOUSEBUTTONDOWN: # Verifica o evento de click do mouse
             posiGol = event.pos # Retorna a possição do Mouse
             balonMoviento = True
+            balonFutbol.iniciarChute(posiGol) 
 
 
     # Paginação de jogo
@@ -57,20 +61,30 @@ while True:
         EscenarioJuego(Ventana, dimensionesVentana["anchura"], dimensionesVentana["altura"])
             
         porteriaArquero.iniciarPorteria(Ventana)
-        porteriaArquero.colisionPorteria(porteriaArquero, balonFutbol) # ERRO
+        arquero.iniciarArquero(Ventana)
+        arquero.defensaPorteria(velocidadeArquero, datosPorteria["pontoX"], datosPorteria["pontoX"]+datosPorteria["anchura"])
         
+        # Atualiza a posição da bola usando a nova lógica de parábola
+        balonFutbol.disparo()
         balonFutbol.iniciarBalon(Ventana)
-        if balonMoviento and posiGol:
-            balonFutbol.disparo(posiGol, balonMoviento)
-            if balonFutbol.pontoX == posiGol[0] and balonFutbol.pontoY == posiGol[1]:
+        
+        if balonMoviento and posiGol and not balonFutbol.emTrajeto:
+            if arquero.colisionArquero(balonFutbol):
+                print("Goleiro pegou a bola. Game Over!")
+                balonMoviento = False
+                arquero.direccionMovimento = "Paro"
+
+            elif balonFutbol.pontoX == posiGol[0] and balonFutbol.pontoY == posiGol[1] and not arquero.colisionArquero(balonFutbol):
+                pontuacao = porteriaArquero.colisionPorteria(balonFutbol, pontuacao)
+                if pontuacao % 10 == 0:
+                    velocidadeArquero += 0.5
                 balonMoviento = False
                 balonFutbol.pontoX = datosBalon["pontoX"]
                 balonFutbol.rect.x = datosBalon["pontoX"]
                 balonFutbol.pontoY = datosBalon["pontoY"]
                 balonFutbol.rect.y = datosBalon["pontoY"]
-        
-        arquero.iniciarArquero(Ventana)
-        arquero.defensaPorteria(1, datosPorteria["pontoX"], datosPorteria["pontoX"]+datosPorteria["anchura"])
+                print(f"Pontuação: {pontuacao}")
+
     
     else:
         InterfazJuego(tipoInterfaz)
