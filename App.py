@@ -56,7 +56,23 @@ while True:
         if event.type == MOUSEBUTTONDOWN and arquero.direccionMovimento != "Paro": # Verifica o evento de click do mouse
             posiGol = event.pos # Retorna a possição do Mouse
             balonMoviento = True
-            balonFutbol.iniciarChute(posiGol) 
+            balonFutbol.iniciarChute(posiGol)
+
+        if (pygame.key.get_pressed()[K_LEFT] or pygame.key.get_pressed()[K_a]) and arquero.direccionMovimento != "Paro":
+            posiGol = (95+datosPorteria["pontoX"], 325)
+            balonMoviento = True
+            balonFutbol.iniciarChute(posiGol)
+
+        if (pygame.key.get_pressed()[K_RIGHT] or pygame.key.get_pressed()[K_d]) and arquero.direccionMovimento != "Paro":
+            posiGol = (dimensionesVentana["anchura"]-(95+datosPorteria["pontoX"]), 325)
+            balonMoviento = True
+            balonFutbol.iniciarChute(posiGol)
+
+        if (pygame.key.get_pressed()[K_UP] or pygame.key.get_pressed()[K_w]) and arquero.direccionMovimento != "Paro":
+            posiGol = (datosBalon["pontoX"]+35, 325)
+            balonMoviento = True
+            balonFutbol.iniciarChute(posiGol)
+    
 
     # Paginação de jogo
     if tipoInterfaz == "juego":
@@ -89,7 +105,7 @@ while True:
 
         # Vefifica se o goleiro parou com a captura da bola para dar "Game Over"
         if arquero.direccionMovimento == "Paro":
-            mensajeFim = fuente.render("Fim de juego", False, (255,0,0))
+            mensajeFim = fuente.render("Fim de juego", False, (0,0,0))
             Ventana.blit(mensajeFim, (300, 325))
     
     else:
