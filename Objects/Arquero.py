@@ -2,14 +2,14 @@ import pygame
 
 # Classe Arquero (Goleiro)
 class Arquero(pygame.sprite.Sprite):
-    def __init__(self, pontoX, pontoY, anchura, altura):
+    def __init__(self, pontoX, pontoY, anchura, altura, direccionMovimento):
         super().__init__()
 
         self.pontoX = pontoX
         self.pontoY = pontoY
         self.anchura = anchura
         self.altura = altura
-        self.direccionMovimento = "derecha"
+        self.direccionMovimento = direccionMovimento
 
         self.imagem = pygame.Surface((self.anchura, self.altura), pygame.SRCALPHA)
 
