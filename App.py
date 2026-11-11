@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from sys import exit
+from random import randint
 
 from Objects.Balon import Balon
 from Objects.Arquero import Arquero
@@ -17,19 +18,19 @@ Ventana = pygame.display.set_mode((dimensionesVentana["anchura"], dimensionesVen
 tituloVentana = pygame.display.set_caption("Videojuego de Fútbol")
 
 # Dados dos objetos do jogo
-datosArqueiro = { "pontoX": 200, "pontoY": (dimensionesVentana["altura"]-300)-130, "anchura": 180, "altura": 300 }
+datosArqueiro = { "pontoX": 200, "pontoY": (dimensionesVentana["altura"]-300)-130, "anchura": 180, "altura": 300, "direccionsArquero": ["izquierda", "derecha"]  }
 datosBalon = { "pontoX": int(dimensionesVentana["anchura"]/2)-35, "pontoY": 590-35, "radioCirculo": 35 }
 datosPorteria = { "pontoX": int((dimensionesVentana["anchura"]-800)/2), "pontoY": 140, "anchura": 800, "altura": dimensionesVentana["altura"]-270}
 
 # Objetos do jogo
-arquero = Arquero(datosPorteria["pontoX"], datosArqueiro["pontoY"], datosArqueiro["anchura"], datosArqueiro["altura"])
+arquero = Arquero(datosPorteria["pontoX"], datosArqueiro["pontoY"], datosArqueiro["anchura"], datosArqueiro["altura"], datosArqueiro["direccionsArquero"][randint(0,1)])
 balonFutbol = Balon(datosBalon["pontoX"], datosBalon["pontoY"], datosBalon["radioCirculo"])
 porteriaArquero = Porteria(datosPorteria["pontoX"], datosPorteria["pontoY"], datosPorteria["anchura"], datosPorteria["altura"])
 
 # Velocidade de atualização de frames do jogo
 relogio = pygame.time.Clock()
-velocidadFotogramas = 320
-velocidadeArquero = 2
+velocidadFotogramas = 325
+velocidadeArquero = 3
 
 tipoInterfaz = "juego"
 balonMoviento = False
@@ -40,7 +41,6 @@ fuente = pygame.font.SysFont("arial", 40, True, False)
 
 #Loop infinito principal para atualização do jogo
 print("Videojuego de Fútbol iniciado")
-print(f"Pontuação: {pontuacao}")
 while True:
     relogio.tick(velocidadFotogramas) #Função para controlar o número de frames por segundo 
     Ventana.fill((255,255,255))
@@ -96,7 +96,7 @@ while True:
         if balonMoviento and posiGol and not balonFutbol.emTrajeto:
             pontuacao = porteriaArquero.colisionPorteria(balonFutbol, pontuacao)
             if pontuacao % 10 == 0:
-                velocidadeArquero += 0.5
+                velocidadeArquero += 1
             balonMoviento = False
             balonFutbol.pontoX = datosBalon["pontoX"]
             balonFutbol.rect.x = datosBalon["pontoX"]
